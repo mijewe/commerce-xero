@@ -196,7 +196,8 @@ class XeroAPI extends Component
                 $contact->setName($contactName)
                     ->setFirstName($contactFirstName)
                     ->setLastName($contactLastName)
-                    ->setEmailAddress($contactEmail);
+                    ->setEmailAddress($contactEmail)
+                    ->addAddress($address);
 
                 // Raise event for before contact save
                 $beforeSaveEvent = new ContactEvent(
