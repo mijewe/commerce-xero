@@ -23,6 +23,7 @@ use thejoshsmith\commerce\xero\Plugin;
 use craft\commerce\elements\Order;
 use XeroPHP\Models\Accounting\Account;
 use XeroPHP\Models\Accounting\Contact;
+use XeroPHP\Models\Accounting\Address;
 
 use XeroPHP\Models\Accounting\Invoice;
 use XeroPHP\Models\Accounting\Payment;
@@ -179,6 +180,18 @@ class XeroAPI extends Component
             )->first();
 
             if (empty($contact) && !isset($contact)) {
+
+				$orderAddress = $order->getBillingAddress();
+				$address = new Address();
+				$address->setAddressType(Address::ADDRESS_TYPE_STREET)
+					->setAddressLine1($orderAddress->address1)
+					->setAddressLine2($orderAddress->address2)
+					->setAddressLine3($orderAddress->address3)
+					->setCity($orderAddress->city)
+					->setRegion($orderAddress->state)
+					->setPostalCode($orderAddress->zipCode)
+					->setCountry($orderAddress->country);
+
                 $contact = new Contact($this->getApplication());
                 $contact->setName($contactName)
                     ->setFirstName($contactFirstName)
