@@ -36,6 +36,7 @@ use thejoshsmith\commerce\xero\helpers\Xero as XeroHelper;
 use XeroPHP\Remote\Exception\BadRequestException;
 use XeroPHP\Remote\Exception\NotAvailableException;
 use thejoshsmith\commerce\xero\records\Invoice as InvoiceRecord;
+use XeroPHP\Models\Accounting\Phone;
 use XeroPHP\Remote\Exception\RateLimitExceededException;
 use XeroPHP\Remote\Exception\OrganisationOfflineException;
 
@@ -198,6 +199,13 @@ class XeroAPI extends Component
                     ->setLastName($contactLastName)
                     ->setEmailAddress($contactEmail)
                     ->addAddress($address);
+
+                if ($orderPhoneNumber = $order->orderPhoneNumber) {
+                    $phone = new Phone();
+                    $phone->setPhoneType(Phone::PHONE_TYPE_DEFAULT);
+                    $phone->setPhoneNumber($orderPhoneNumber);
+                    $contact->addPhone($phone);
+                }
 
                 // Raise event for before contact save
                 $beforeSaveEvent = new ContactEvent(
