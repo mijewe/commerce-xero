@@ -202,6 +202,7 @@ class XeroAPI extends Component
 
                 if ($orderPhoneNumber = $order->orderPhoneNumber) {
                     $phone = new Phone();
+                    $phone->setPhoneType(Phone::PHONE_TYPE_DEFAULT);
                     $phone->setPhoneNumber($orderPhoneNumber);
                     $contact->addPhone($phone);
                 }
