@@ -201,9 +201,9 @@ class XeroAPI extends Component
                     ->addAddress($address);
 
                 if ($orderPhoneNumber = $order->orderPhoneNumber) {
-                    $phoneNumber = new Phone();
-                    $phoneNumber->setPhoneNumber($orderPhoneNumber);
-                    $contact->addPhone($phoneNumber);
+                    $phone = new Phone();
+                    $phone->setPhoneNumber($orderPhoneNumber);
+                    $contact->addPhone($phone);
                 }
 
                 // Raise event for before contact save
