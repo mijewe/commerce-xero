@@ -165,13 +165,16 @@ class XeroAPI extends Component
             // this can return either fullname or their username (email hopefully)
             $user = $order->getUser();
 
+			// get the billing address of the order
+			$orderAddress = $order->getBillingAddress();
+
             // Define contact details
             // Note: It's possible for customers to _only_ have
             // an email address, so we need to cater for that scenario
             $contactEmail = $user ? $user->email : $order->getEmail();
             $contactName = $user ? $user->getName() : $order->getEmail();
-            $contactFirstName = $user->firstName ?? null;
-            $contactLastName = $user->lastName ?? null;
+            $contactFirstName = $user ? $user->firstName : $orderAddress->firstName;
+            $contactLastName = $user->lastName ?? $orderAddress->lastName;
 
             $contact = $this->getApplication()->load(Contact::class)->where(
                 '
@@ -182,7 +185,6 @@ class XeroAPI extends Component
 
             if (empty($contact) && !isset($contact)) {
 
-				$orderAddress = $order->getBillingAddress();
 				$address = new Address();
 				$address->setAddressType(Address::ADDRESS_TYPE_STREET)
 					->setAddressLine1($orderAddress->address1)
