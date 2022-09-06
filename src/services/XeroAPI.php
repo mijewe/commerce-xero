@@ -186,7 +186,7 @@ class XeroAPI extends Component
             if (empty($contact) && !isset($contact)) {
 
 				$address = new Address();
-				$address->setAddressType(Address::ADDRESS_TYPE_STREET)
+				$address->setAddressType(Address::ADDRESS_TYPE_POBOX)
 					->setAddressLine1($orderAddress->address1)
 					->setAddressLine2($orderAddress->address2)
 					->setAddressLine3($orderAddress->address3)
