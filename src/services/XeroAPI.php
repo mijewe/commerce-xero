@@ -247,7 +247,7 @@ class XeroAPI extends Component
         foreach ($order->getLineItems() as $orderItem) {
             $lineItem = new LineItem($this->getApplication());
             $lineItem->setAccountCode($this->_client->getOrgSettings()->accountSales);
-            $lineItem->setDescription($orderItem->description);
+            $lineItem->setDescription("PAT Testing Course - " . $orderItem->description);
             $lineItem->setQuantity($orderItem->qty);
             if ($orderItem->discount > 0) {
                 $discountPercentage = (($orderItem->discount / $orderItem->subtotal) * -100);
