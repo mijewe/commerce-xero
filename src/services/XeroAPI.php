@@ -165,8 +165,13 @@ class XeroAPI extends Component
             // this can return either fullname or their username (email hopefully)
             $user = $order->getUser();
 
-			// get the billing address of the order
-			$orderAddress = $order->getBillingAddress();
+            // get the billing address of the order
+            $orderAddress = $order->getBillingAddress();
+
+            // get businessName from billing address
+            if ($orderAddress) {
+                $businessName = $orderAddress->businessName;
+            }
 
             // Define contact details
             // Note: It's possible for customers to _only_ have
@@ -183,17 +188,27 @@ class XeroAPI extends Component
             '
             )->first();
 
+            // concatenate businessName onto full user name
+            if ($businessName) {
+                $contactName = $businessName . ' | ' . $contactName;
+            }
+
+            // if contact model exists set name to the concatenate businessName and user name
+            if (!empty($contact) && isset($contact)) {
+                $contact->setName($contactName);
+            }
+
             if (empty($contact) && !isset($contact)) {
 
-				$address = new Address();
-				$address->setAddressType(Address::ADDRESS_TYPE_POBOX)
-					->setAddressLine1($orderAddress->address1)
-					->setAddressLine2($orderAddress->address2)
-					->setAddressLine3($orderAddress->address3)
-					->setCity($orderAddress->city)
-					->setRegion($orderAddress->state)
-					->setPostalCode($orderAddress->zipCode)
-					->setCountry($orderAddress->country);
+                $address = new Address();
+                $address->setAddressType(Address::ADDRESS_TYPE_POBOX)
+                    ->setAddressLine1($orderAddress->address1)
+                    ->setAddressLine2($orderAddress->address2)
+                    ->setAddressLine3($orderAddress->address3)
+                    ->setCity($orderAddress->city)
+                    ->setRegion($orderAddress->state)
+                    ->setPostalCode($orderAddress->zipCode)
+                    ->setCountry($orderAddress->country);
 
                 $contact = new Contact($this->getApplication());
                 $contact->setName($contactName)
